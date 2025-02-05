@@ -1,24 +1,9 @@
 
-# targets-iSSA
+# Terra Nova caribou iSSA 
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6423519.svg)](https://doi.org/10.5281/zenodo.6423519)
+Modelled after iSSA Guild's targets-iSSA workflow, [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6423519.svg)](https://doi.org/10.5281/zenodo.6423519)
 
-![](README_files/figure-gfm/viz.png)
-
-## Setup
-
-``` r
-renv::restore()
-```
-
-## Run the workflow
-
-``` r
-library(targets)
-tar_make()
-```
-
-## Resources
-
-How-To iSSA: <https://issa-guild.github.io/book/>,
-<https://github.com/iSSA-guild/book>
+Code and data associated with:
+Social facilitation of risky habitats in woodland caribou: responses to fire and roads
+Hendrix, J.G., Brown, C.B., Gosse, J. & Vander Wal, E.
+(manuscript in revision at Canadian Journal of Zoology, 2025)
