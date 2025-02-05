@@ -14,7 +14,7 @@ plot_boxplot_seasonal <- function(DT, theme, predictor) {
 		ggtitle(paste0(DT$season," ", predictor, " model"))
 
 	ggsave(
-		filename = paste0('graphics/', predictor, '_indiv_responses_', DT$season, '.png'),
+		filename = paste0('graphics/rev/summary/boxplot_', predictor, '_indiv_responses_', DT$season, '.png'),
 		gbox,
 		width = 10,
 		height = 10,

@@ -5,7 +5,7 @@ plot_rss_seasonal_forest <- function(rss, theme, predictor) {
 
 	rss %<>% mutate(s_code = ifelse(season == "winter", 1, 2),
 								 s_code = ifelse(season == "calving", 3, s_code),
-								 s_code = ifelse(season == "autumn", 4, s_code))
+								 s_code = ifelse(season == "autumn migration", 4, s_code))
 
 	for(i in 1:4) {
 		data <- subset(rss, s_code == i)
@@ -31,7 +31,7 @@ g <- ggplot(data, aes(x, rss)) +
 		ggtitle(paste0(predictor, ' model - RSS compared to 0 forest - ', data$season))
 
 ggsave(
-	filename = paste0('graphics/rss/rss_forest_', predictor, '_', i, '.png'),
+	filename = paste0('graphics/rev/rss/rss_forest_', predictor, '_', i, '.png'),
 	width = 10,
 	height = 10,
 	dpi = 320

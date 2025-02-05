@@ -6,8 +6,7 @@ predict_h1_minor <- function(DT, model) {
 
 	new_data <- DT[, .(
 		sl_ = mean(sl_),
-		forest = 0,
-		open = 0,
+		prop_forest = mean(prop_forest, na.rm = T),
 		dist_to_minor = seq(from = 0, to = 20000, length.out = N),
 		dist_to_tch = median(dist_to_tch, na.rm = T),
 		indiv_step_id = NA

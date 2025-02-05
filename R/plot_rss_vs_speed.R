@@ -30,7 +30,7 @@ g <- ggplot(sum, aes(x = spd, y = rss,
 	scale_colour_viridis(discrete = TRUE, option = "C") +
 	theme_bw()
 
-ggsave(filename = paste0("graphics/test/speed_selection_comp_", option, ".png"),
+ggsave(filename = paste0("graphics/rev/speed_selection_comp_", option, ".png"),
 	width = 10,
 	height = 10,
 	dpi = 320

@@ -1,0 +1,109 @@
+---
+title: "Collar group size validation"
+author: "Jack Hendrix"
+date: "2025-02-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Investigation of group size by number of collared individuals
+
+We have a set of observations from 2016 to present on Fogo Island, where every time we see a caribou or group of caribou, we record total group size and demographic composition, along with the number and identity of any tagged animals in the group.
+
+```{r, warning=FALSE}
+
+library(dplyr)
+library(readr)
+library(ggplot2)
+
+coll <- read_csv("Fogo-group-size.csv")
+
+```
+
+
+# Modelling group size by number of GPS collars
+
+```{r}
+summary(lm(total ~ collars, data = coll))
+```
+``` {r, echo = FALSE}
+ggplot(coll, aes(x = collars, y = total)) +
+	geom_jitter() +
+	geom_smooth(method = "lm") +
+	xlab("Collared individuals") +
+	ylab("Total group size") +
+	theme_bw()
+
+```
+
+The number of collared individuals predicts 59% of the variation in total group size.
+
+Only adult females in this population have GPS collars, so the number of collars could correlate better with only the number of adult females in a given group, excluding males and calves.
+``` {r}
+summary(lm(ad_female ~ collars, data = coll))
+
+```
+``` {r, echo = FALSE, warning = FALSE}
+ggplot(coll, aes(x = collars, y = ad_female)) +
+	geom_jitter() +
+	geom_smooth(method = "lm") +
+	xlab("Collared individuals") +
+	ylab("Adult females in group") +
+	theme_bw()
+
+```
+
+This model also does reasonably well, with an R2 of 51%. Number collared appears to be a good predictor of both
+
+## Group size with either one or two collared individuals
+Some of the Fogo groups had more than two collared animals in the same group, or no collared individuals present at all, hence the models above used 'number collared' as a continuous predictor. For our Terra Nova analyses, we only have dyads and not dyads, i.e. one or two collars present at any given time. We can subset our observations to only include groups containing one or two collared females, and see how group sizes compare between those two cases.
+
+# Modelling group size by single vs. dyad
+```{r}
+dyads <- coll %>% mutate(dyad = ifelse(collars == 1, "alone", ifelse(collars == 2, "dyad", NA))) %>%
+	filter(!is.na(dyad))
+
+summary(lm(total ~ dyad, data = dyads))
+```
+
+Dyads of collared individuals tend to occur in larger groups than single collars; on average, group with two collars are >8 individuals larger than groups with one collar - though R2 is slightly less, 25%, for this subset.
+
+```{r, echo = FALSE}
+ggplot(dyads, aes(x = dyad, y = total)) +
+	geom_boxplot(outliers = FALSE) +
+	geom_jitter(alpha = 0.5) +
+	xlab("Collared individuals") +
+	ylab("Total group size") +
+	theme_bw()
+```
+
+There are some large groups in both cases. But typically, dyads do indicate larger groups.
+
+Again, checking dyads vs. number of only adult females in each group
+```{r}
+
+summary(lm(ad_female ~ dyad, data = dyads))
+```
+
+There are more adult females present with two collared individuals vs. one, R2 = 28%.
+
+```{r, echo = FALSE, warning = FALSE}
+ggplot(dyads, aes(x = dyad, y = ad_female)) +
+	geom_boxplot(outliers = FALSE) +
+	geom_jitter(alpha = 0.5) +
+	xlab("Collared individuals") +
+	ylab("Number adult females") +
+	theme_bw()
+```
+
+Summary statistics for total group size:
+```{r}
+dyads %>% group_by(dyad) %>%
+	summarise(n = n(),
+						mean = mean(total),
+						med = median(total),
+						se = sd(total)/sqrt(n))
+```

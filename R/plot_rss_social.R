@@ -16,7 +16,8 @@ plot_rss_social <- function(rss, theme) {
 							show.legend = F
 		)+
 		scale_color_viridis(discrete = "TRUE", option = "D", begin = 0.85, end = 0.2) +
-		geom_smooth(size = 1.2, method = "lm",
+		geom_smooth(linewidth = 1.2, method = "lm",
+								fill = "darkgrey",
 								formula = ifelse(mean(rss$x) > 1,
 																 "y ~ log(x+1)", "y ~ x")) +
 		geom_hline(
@@ -26,7 +27,7 @@ plot_rss_social <- function(rss, theme) {
 			size = .7
 		) +
 		plot_theme() +
-		ylim(c(-0.5, 1.5)) +
+		ylim(c(-10, 3)) +
 		theme(plot.title = element_text(size = 12, hjust = 0.05),
 					axis.title = element_text(size = 12),
 					axis.text = element_text(size = 10))

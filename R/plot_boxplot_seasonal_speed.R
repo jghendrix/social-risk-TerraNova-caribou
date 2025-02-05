@@ -1,7 +1,7 @@
-#' @title Plot boxplots of speed from roads model
+#' @title Plot boxplots of speed from seasonal model
 #' @export
 #' @author Jack G Hendrix
-plot_box_seasonal_speed <- function(DT, theme, predictor) {
+plot_box_seasonal_speed <- function(DT, theme, model, predictor) {
 
 	# this is the laziest workaround version of this but oh well
 
@@ -18,11 +18,11 @@ plot_box_seasonal_speed <- function(DT, theme, predictor) {
 		geom_hline(yintercept = 0, lty = 'dashed') +
 		scale_colour_viridis(discrete = "TRUE", option = "C", begin = 0.25, end = 0.7) +
 		plot_theme() +
-		labs(x = 'Closed (0) vs open (1)', y = 'Speed (m/2hr)') +
+		labs(x = predictor, y = 'Speed (m/2hr)') +
 		ggtitle(subset(DT, s_code == i)$season)
 
 	ggsave(
-		filename = paste0('graphics/speed/', predictor, '_speed_in_open_', i, '.png'),
+		filename = paste0('graphics/speed/', model, '_speed_', predictor, '_', i, '.png'),
 		gbox,
 		width = 10,
 		height = 10,

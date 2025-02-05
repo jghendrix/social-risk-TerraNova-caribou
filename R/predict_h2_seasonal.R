@@ -6,8 +6,7 @@ predict_h2_seasonal <- function(DT, model, predictor, season_key) {
 	if(predictor == "fire")
 		new_data <-		DT[, .(
 			sl_ = mean(sl_),
-			forest = 0,
-			open = 0,
+			prop_forest = mean(prop_forest, na.rm = T),
 			dist_to_new_burn = median(dist_to_new_burn, na.rm = TRUE),
 			dist_to_old_burn = median(dist_to_old_burn, na.rm = TRUE),
 			indiv_step_id = NA),
@@ -16,8 +15,7 @@ predict_h2_seasonal <- function(DT, model, predictor, season_key) {
 	if(predictor == "road")
 		new_data <-	DT[, .(
 			sl_ = mean(sl_),
-			forest = 0,
-			open = 0,
+			prop_forest = mean(prop_forest, na.rm = T),
 			dist_to_tch = median(dist_to_tch, na.rm = TRUE),
 			dist_to_minor = median(dist_to_minor, na.rm = TRUE),
 			indiv_step_id = NA),
