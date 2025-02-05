@@ -2,7 +2,7 @@
 title: "Collar group size validation"
 author: "Jack Hendrix"
 date: "2025-02-03"
-output: html_document
+output: word_document
 ---
 
 ```{r setup, include=FALSE}
@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 We have a set of observations from 2016 to present on Fogo Island, where every time we see a caribou or group of caribou, we record total group size and demographic composition, along with the number and identity of any tagged animals in the group.
 
-```{r, warning=FALSE}
+```{r warning=FALSE}
 
 library(dplyr)
 library(readr)
