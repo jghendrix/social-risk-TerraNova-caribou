@@ -28,7 +28,7 @@ seasonal_split <- "season"
 targets_data <- c(
 	tar_target(
 		model_prep,
-		readr::read_csv('model_prep.csv', show_col_types = FALSE)
+		setDT(readr::read_csv('model_prep.csv', show_col_types = FALSE))
 	)
 )
 
@@ -72,7 +72,7 @@ tar_target(
 targets_fire_effects <- c(
 	tar_target(
 		indiv_fire,
-		indiv_estimates(fire_model)
+		indiv_estimates(fire_model, "fire")
 	),
 	tar_target(
 		fire_boxplot,
@@ -193,7 +193,7 @@ targets_rss_fire <- c(
 	),
 	tar_target(
 		pred_h1_forest_fire,
-		predict_h1_forest(model_prep, fire_model, "fire", "none")
+		predict_h1_forest(model_prep, fire_model, "fire")
 	),
 	tar_target(
 		pred_h2_fire,
@@ -346,7 +346,7 @@ targets_road_seasonal <- c(
 targets_road_effects <- c(
 	tar_target(
 		indiv_road,
-		indiv_estimates(road_model)
+		indiv_estimates(road_model, "road")
 	),
 	tar_target(
 		road_boxplot,
@@ -468,7 +468,7 @@ targets_rss_road <- c(
 	),
 	tar_target(
 		pred_h1_forest_road,
-		predict_h1_forest(model_prep, road_model, "road", "none")
+		predict_h1_forest(model_prep, road_model, "road")
 	),
 	tar_target(
 		pred_h2_road,
@@ -589,7 +589,7 @@ targets_social_fire <- c(
 targets_social_fire_effects <- c(
 	tar_target(
 		indiv_social_fire,
-		indiv_estimates(social_fire_model)
+		indiv_estimates(social_fire_model, "fire")
 	),
 	tar_target(
 		social_fire_boxplot,
@@ -635,12 +635,12 @@ targets_social_fire_effects <- c(
 targets_rss_fire_social <- c(
 	tar_target(
 		fire_pred_h1_forest_dyad,
-		predict_h1_forest(subset(model_prep, season == "winter"),
+		predict_h1_forest_social(subset(model_prep, season == "winter"),
 											social_fire_model, "fire", "dyad")
 	),
 tar_target(
 	fire_pred_h1_forest_alone,
-	predict_h1_forest(subset(model_prep, season == "winter"),
+	predict_h1_forest_social(subset(model_prep, season == "winter"),
 										social_fire_model, "fire", "alone")
 ),
 
@@ -768,7 +768,7 @@ targets_social_roads <- c(
 targets_social_road_effects <- c(
 	tar_target(
 		indiv_social_road,
-		indiv_estimates(social_road_model)
+		indiv_estimates(social_road_model, "road")
 	),
 	tar_target(
 		social_road_boxplot,
@@ -816,12 +816,12 @@ targets_social_road_effects <- c(
 targets_rss_road_social <- c(
 	tar_target(
 		road_pred_h1_forest_dyad,
-		predict_h1_forest(subset(model_prep, season == "winter"),
+		predict_h1_forest_social(subset(model_prep, season == "winter"),
 											social_road_model, "road", "dyad")
 	),
 	tar_target(
 		road_pred_h1_forest_alone,
-		predict_h1_forest(subset(model_prep, season == "winter"),
+		predict_h1_forest_social(subset(model_prep, season == "winter"),
 											social_road_model, "road", "alone")
 	),
 
