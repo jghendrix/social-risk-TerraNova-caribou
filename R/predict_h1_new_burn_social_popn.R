@@ -18,20 +18,8 @@ predict_h1_new_burn_social_p <- function(DT, popn, social) {
 
 	new <- cbind(new_data, popn)
 	setDT(new)
-	#############################
 
 	if(social == "alone") {
-
-		new[, h1_new_min :=
-					sl*sl_B +
-					forest*forest_B +
-					dist_new*dist_new_B +
-					dist_old*dist_old_B +
-					forest*forestXalone_min +
-					sl*forest*slXforest +
-					sl*dist_new*slXnew +
-					sl*dist_old*slXold
-		]
 
 		new[, h1_new_mean :=
 					sl*sl_B +
@@ -43,18 +31,12 @@ predict_h1_new_burn_social_p <- function(DT, popn, social) {
 					sl*dist_new*slXnew +
 					sl*dist_old*slXold
 		]
-		new[, h1_new_max :=
-					sl*sl_B +
-					forest*forest_B +
-					dist_new*dist_new_B +
-					dist_old*dist_old_B +
-					forest*forestXalone_max +
-					sl*forest*slXforest +
-					sl*dist_new*slXnew +
-					sl*dist_old*slXold
-		]
 
-		new[, x := seq(from = 0, to = 20000, length.out = N)]
+		new[, h1_new_min := h1_new_mean]
+
+		new[, h1_new_max := h1_new_mean]
+
+		new[, x := seq(from = 0, to = 20, length.out = N)]
 
 	}
 
@@ -65,7 +47,7 @@ predict_h1_new_burn_social_p <- function(DT, popn, social) {
 					dist_new*dist_new_B +
 					dist_old*dist_old_B +
 					dist_new*newXdyad_min +
-					dist_old*oldXdyad_min +
+					dist_old*oldXdyad_mean +
 					sl*forest*slXforest +
 					sl*dist_new*slXnew +
 					sl*dist_old*slXold
@@ -89,13 +71,13 @@ predict_h1_new_burn_social_p <- function(DT, popn, social) {
 					dist_new*dist_new_B +
 					dist_old*dist_old_B +
 					dist_new*newXdyad_max +
-					dist_old*oldXdyad_max +
+					dist_old*oldXdyad_mean +
 					sl*forest*slXforest +
 					sl*dist_new*slXnew +
 					sl*dist_old*slXold
 		]
 
-		new[, x := seq(from = 0, to = 20000, length.out = N)]
+		new[, x := seq(from = 0, to = 20, length.out = N)]
 
 	}
 }

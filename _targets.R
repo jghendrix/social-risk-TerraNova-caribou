@@ -923,53 +923,54 @@ targets_rss_social_popn <- c(
 		setDT(readr::read_csv('road_betas.csv', show_col_types = FALSE))
 	),
 	## Social RSS for forest at the population level ----
+
 	tar_target(
-		p_fire_pred_h1_forest_dyad,
+		p_fire_h1_forest_dyad,
 		predict_h1_forest_social_p(model_prep, fire_popn, "fire", "dyad")
 	),
 	tar_target(
-		p_fire_pred_h1_forest_alone,
+		p_fire_h1_forest_alone,
 		predict_h1_forest_social_p(model_prep, fire_popn, "fire", "alone")
 	),
 	tar_target(
-		p_fire_pred_h2_dyad,
+		p_fire_h2_forest_dyad,
 		predict_h2_p(subset(model_prep, season == "winter"),
-								 fire_popn, "fire dyad", "zero")
+								 fire_popn, "fire", "forest", "dyad")
 	),
 	tar_target(
-		p_fire_pred_h2_alone,
+		p_fire_h2_forest_alone,
 		predict_h2_p(subset(model_prep, season == "winter"),
-								 fire_popn, "fire alone", "zero")
+								 fire_popn, "fire", "forest", "alone")
 	),
 
 	tar_target(
 		min_forest_dyad,
-		calc_rss_p(p_fire_pred_h1_forest_dyad, 'h1_forest_min', p_fire_pred_h2_dyad, 'h2_min')
+		calc_rss_p(p_fire_h1_forest_dyad, 'h1_forest_min', p_fire_h2_forest_dyad, 'h2_min')
 	),
 
 	tar_target(
 		mean_forest_dyad,
-		calc_rss_p(p_fire_pred_h1_forest_dyad, 'h1_forest_mean', p_fire_pred_h2_dyad, 'h2_mean')
+		calc_rss_p(p_fire_h1_forest_dyad, 'h1_forest_mean', p_fire_h2_forest_dyad, 'h2_mean')
 	),
 
 	tar_target(
 		max_forest_dyad,
-		calc_rss_p(p_fire_pred_h1_forest_dyad, 'h1_forest_max', p_fire_pred_h2_dyad, 'h2_max')
+		calc_rss_p(p_fire_h1_forest_dyad, 'h1_forest_max', p_fire_h2_forest_dyad, 'h2_max')
 	),
 
 	tar_target(
 		min_forest_alone,
-		calc_rss_p(p_fire_pred_h1_forest_alone, 'h1_forest_min', p_fire_pred_h2_alone, 'h2_min')
+		calc_rss_p(p_fire_h1_forest_alone, 'h1_forest_min', p_fire_h2_forest_alone, 'h2_min')
 	),
 
 	tar_target(
 		mean_forest_alone,
-		calc_rss_p(p_fire_pred_h1_forest_alone, 'h1_forest_mean', p_fire_pred_h2_alone, 'h2_mean')
+		calc_rss_p(p_fire_h1_forest_alone, 'h1_forest_mean', p_fire_h2_forest_alone, 'h2_mean')
 	),
 
 	tar_target(
 		max_forest_alone,
-		calc_rss_p(p_fire_pred_h1_forest_alone, 'h1_forest_max', p_fire_pred_h2_alone, 'h2_max')
+		calc_rss_p(p_fire_h1_forest_alone, 'h1_forest_max', p_fire_h2_forest_alone, 'h2_max')
 	),
 
 	tar_target(
@@ -984,38 +985,51 @@ targets_rss_social_popn <- c(
 			labs(x = 'Proportion forested', y = 'logRSS',
 					 title = 'Social RSS for forest')),
 
+
 	## Population level new burn social RSS -----
+
+
 	tar_target(
-		p_fire_pred_h1_new_dyad,
+		p_fire_h1_new_dyad,
 		predict_h1_new_burn_social_p(model_prep, fire_popn, "dyad")
 	),
 	tar_target(
-		p_fire_pred_h1_new_alone,
+		p_fire_h1_new_alone,
 		predict_h1_new_burn_social_p(model_prep, fire_popn, "alone")
 	),
 	tar_target(
+		p_fire_h2_new_dyad,
+		predict_h2_p(subset(model_prep, season == "winter"),
+								 fire_popn, "fire", "new burn", "dyad")
+	),
+	tar_target(
+		p_fire_h2_new_alone,
+		predict_h2_p(subset(model_prep, season == "winter"),
+								 fire_popn, "fire", "new burn", "alone")
+	),
+	tar_target(
 		min_new_dyad,
-		calc_rss_p(p_fire_pred_h1_new_dyad, 'h1_new_min', p_fire_pred_h2_dyad, 'h2_min')
+		calc_rss_p(p_fire_h1_new_dyad, 'h1_new_min', p_fire_h2_new_dyad, 'h2_min')
 	),
 	tar_target(
 		mean_new_dyad,
-		calc_rss_p(p_fire_pred_h1_new_dyad, 'h1_new_mean', p_fire_pred_h2_dyad, 'h2_mean')
+		calc_rss_p(p_fire_h1_new_dyad, 'h1_new_mean', p_fire_h2_new_dyad, 'h2_mean')
 	),
 	tar_target(
 		max_new_dyad,
-		calc_rss_p(p_fire_pred_h1_new_dyad, 'h1_new_max', p_fire_pred_h2_dyad, 'h2_max')
+		calc_rss_p(p_fire_h1_new_dyad, 'h1_new_max', p_fire_h2_new_dyad, 'h2_max')
 	),
 	tar_target(
 		min_new_alone,
-		calc_rss_p(p_fire_pred_h1_new_alone, 'h1_new_min', p_fire_pred_h2_alone, 'h2_min')
+		calc_rss_p(p_fire_h1_new_alone, 'h1_new_min', p_fire_h2_new_alone, 'h2_min')
 	),
 	tar_target(
 		mean_new_alone,
-		calc_rss_p(p_fire_pred_h1_new_alone, 'h1_new_mean', p_fire_pred_h2_alone, 'h2_mean')
+		calc_rss_p(p_fire_h1_new_alone, 'h1_new_mean', p_fire_h2_new_alone, 'h2_mean')
 	),
 	tar_target(
 		max_new_alone,
-		calc_rss_p(p_fire_pred_h1_new_alone, 'h1_new_max', p_fire_pred_h2_alone, 'h2_max')
+		calc_rss_p(p_fire_h1_new_alone, 'h1_new_max', p_fire_h2_new_alone, 'h2_max')
 	),
 	tar_target(
 		p_new_social,

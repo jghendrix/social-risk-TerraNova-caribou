@@ -22,17 +22,6 @@ predict_h1_forest_social_p <- function(DT, popn, predictor, sociality) {
 			new <- cbind(new_data, popn)
 			setDT(new)
 
-			new[, h1_forest_min :=
-							 	sl*sl_B +
-							 	forest*forest_B +
-							 	dist_new*dist_new_B +
-							 	dist_old*dist_old_B +
-							 	forest*forestXalone_min +
-							 	sl*forest*slXforest +
-							 	sl*dist_new*slXnew +
-							 	sl*dist_old*slXold
-			]
-
 			new[, h1_forest_mean :=
 						sl*sl_B +
 						forest*forest_B +
@@ -42,6 +31,16 @@ predict_h1_forest_social_p <- function(DT, popn, predictor, sociality) {
 						sl*forest*slXforest +
 						sl*dist_new*slXnew +
 						sl*dist_old*slXold
+			]
+			new[, h1_forest_min :=
+							 	sl*sl_B +
+							 	forest*forest_B +
+							 	dist_new*dist_new_B +
+							 	dist_old*dist_old_B +
+							 	forest*forestXalone_min +
+							 	sl*forest*slXforest +
+							 	sl*dist_new*slXnew +
+							 	sl*dist_old*slXold
 			]
 			new[, h1_forest_max :=
 							sl*sl_B +
@@ -69,19 +68,7 @@ predict_h1_forest_social_p <- function(DT, popn, predictor, sociality) {
 
 
 
-			new[, h1_forest_min :=
-						sl*sl_B +
-						forest*forest_B +
-						dist_new*dist_new_B +
-						dist_old*dist_old_B +
-						dist_new*newXdyad_min +
-						dist_old*oldXdyad_min +
-						sl*forest*slXforest +
-						sl*dist_new*slXnew +
-						sl*dist_old*slXold
-			]
-
-				new[, h1_forest_mean :=
+			new[, h1_forest_mean :=
 						sl*sl_B +
 						forest*forest_B +
 						dist_new*dist_new_B +
@@ -92,19 +79,8 @@ predict_h1_forest_social_p <- function(DT, popn, predictor, sociality) {
 						sl*dist_new*slXnew +
 						sl*dist_old*slXold
 			]
-
-			new[, h1_forest_max :=
-						sl*sl_B +
-						forest*forest_B +
-						dist_new*dist_new_B +
-						dist_old*dist_old_B +
-						dist_new*newXdyad_max +
-						dist_old*oldXdyad_max +
-						sl*forest*slXforest +
-						sl*dist_new*slXnew +
-						sl*dist_old*slXold
-			]
-
+			new[, h1_forest_min := h1_forest_mean]
+			new[, h1_forest_max := h1_forest_mean]
 			new[, x := seq(from = 0, to = 1, length.out = N)]
 
 		}
@@ -123,23 +99,22 @@ predict_h1_forest_social_p <- function(DT, popn, predictor, sociality) {
 			new <- cbind(new_data, popn)
 			setDT(new)
 
-			new[, h1_forest_min :=
-						sl*sl_B +
-						forest*forest_B +
-						dist_tch*dist_tch_B +
-						dist_tch*dist_tch_B +
-						forest*forestXalone_min +
-						sl*forest*slXforest +
-						sl*dist_new*slXnew +
-						sl*dist_old*slXold
-			]
-
 			new[, h1_forest_mean :=
 						sl*sl_B +
 						forest*forest_B +
 						dist_tch*dist_tch_B +
 						dist_tch*dist_tch_B +
 						forest*forestXalone_mean +
+						sl*forest*slXforest +
+						sl*dist_new*slXnew +
+						sl*dist_old*slXold
+			]
+			new[, h1_forest_min :=
+						sl*sl_B +
+						forest*forest_B +
+						dist_tch*dist_tch_B +
+						dist_tch*dist_tch_B +
+						forest*forestXalone_min +
 						sl*forest*slXforest +
 						sl*dist_new*slXnew +
 						sl*dist_old*slXold
@@ -168,18 +143,6 @@ predict_h1_forest_social_p <- function(DT, popn, predictor, sociality) {
 			new <- cbind(new_data, popn)
 			setDT(new)
 
-			new[, h1_forest_min :=
-						sl*sl_B +
-						forest*forest_B +
-						dist_tch*dist_tch_B +
-						dist_minor*dist_minor_B +
-						dist_tch*tchXdyad_min +
-						dist_minor*minorXdyad_min +
-						sl*forest*slXforest +
-						sl*dist_tch*slXtch +
-						sl*dist_minor*slXminor
-			]
-
 			new[, h1_forest_mean :=
 						sl*sl_B +
 						forest*forest_B +
@@ -191,18 +154,8 @@ predict_h1_forest_social_p <- function(DT, popn, predictor, sociality) {
 						sl*dist_tch*slXtch +
 						sl*dist_minor*slXminor
 			]
-
-			new[, h1_forest_max :=
-						sl*sl_B +
-						forest*forest_B +
-						dist_tch*dist_tch_B +
-						dist_minor*dist_minor_B +
-						dist_tch*tchXdyad_max +
-						dist_minor*minorXdyad_max +
-						sl*forest*slXforest +
-						sl*dist_tch*slXtch +
-						sl*dist_minor*slXminor
-			]
+			new[, h1_forest_min := h1_forest_mean]
+			new[, h1_forest_max := h1_forest_mean]
 
 			new[, x := seq(from = 0, to = 1, length.out = N)]
 
