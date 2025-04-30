@@ -25,7 +25,7 @@ if(predictor == "forest fire") {
 		ggtitle(subset(DT, s_code == i)$season)
 
 	ggsave(
-		filename = paste0('graphics/rev/speed/speed_by_', predictor, "_", i, '.png'),
+		filename = paste0('graphics/speed/speed_by_', predictor, "_", i, '.png'),
 		g,
 		width = 10,
 		height = 10,
@@ -77,7 +77,7 @@ if(predictor == "forest fire") {
 		ggtitle(subset(DT, s_code == i)$season)
 
 	ggsave(
-		filename = paste0('graphics/rev/speed/speed_by_', predictor, "_", i, '.png'),
+		filename = paste0('graphics/speed/speed_by_', predictor, "_", i, '.png'),
 		g,
 		width = 8,
 		height = 8,

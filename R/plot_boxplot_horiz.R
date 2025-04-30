@@ -16,7 +16,7 @@ gbox <- ggplot(data = DT[term !='(Intercept)' & term != 'lc_adjother'],
 		ggtitle(paste0(predictor, ' model'))
 
 ggsave(
-	paste0('graphics/rev/summary/boxplot_', predictor, '_indiv_selection.png'),
+	paste0('graphics/summary/boxplot_', predictor, '_indiv_selection.png'),
 	gbox,
 	width = 10,
 	height = 10,

@@ -29,6 +29,11 @@ targets_data <- c(
 	tar_target(
 		model_prep,
 		setDT(readr::read_csv('model_prep.csv', show_col_types = FALSE))
+	),
+
+	tar_target(
+		dist_parameters,
+		setDT(readr::read_csv('dist_parameters.csv', show_col_types = FALSE))
 	)
 )
 
@@ -80,7 +85,7 @@ targets_fire_effects <- c(
 	),
 	tar_target(
 		s_indiv_fire,
-		indiv_seasonal(s_fire_model, season_key),
+		indiv_seasonal(s_fire_model, season_key, "fire"),
 		pattern = map(s_fire_model, season_key)
 	),
 	tar_target(
@@ -102,13 +107,13 @@ targets_speed_fire <- c(
 		)
 	),
 	tar_target(
-		calc_speed_open_fire,
-		calc_speed(prep_speed_fire, 'open fire', seq = 0:1)
+		calc_speed_forest_fire,
+		calc_speed(prep_speed_fire, 'forest fire', seq = 0:1)
 	),
 	tar_target(
-		plot_speed_open_fire,
-		plot_box(calc_speed_open_fire, plot_theme()) +
-			labs(x = 'Open', y = 'Speed (m/2hr)')
+		plot_speed_forest_fire,
+		plot_box(calc_speed_forest_fire, plot_theme()) +
+			labs(x = '% Forested', y = 'Speed (m/2hr)')
 	),
 	tar_target(
 		calc_speed_new_burn,
@@ -130,7 +135,7 @@ targets_speed_fire <- c(
 	),
 	tar_target(
 		fire_plots,
-		save_plot(plot_speed_open_fire, "fire_model_speed_open",
+		save_plot(plot_speed_forest_fire, "fire_model_speed_forest",
 							plot_speed_new_burn, "fire_model_speed_new_burn",
 							plot_speed_old_burn, "fire_model_speed_old_burn")
 	)
@@ -151,13 +156,13 @@ targets_speed_fire_seasonal <- c(
 		map(s_indiv_fire, season_key)
 	),
 	tar_target(
-		calc_speed_open_s_fire,
-		calc_speed_seasonal(prep_speed_s_fire, 'open', "fire", seq = 0:1, season_key),
+		calc_speed_forest_s_fire,
+		calc_speed_seasonal(prep_speed_s_fire, 'forest', "fire", seq = 0:1, season_key),
 		map(prep_speed_s_fire, season_key)
 	),
 	tar_target(
-		plot_speed_open_s_fire,
-		plot_box_seasonal_speed(calc_speed_open_s_fire, plot_theme(), "fire")
+		plot_speed_forest_s_fire,
+		plot_box_seasonal_speed(calc_speed_forest_s_fire, plot_theme(), "fire", "forest")
 	),
 
 	tar_target(
@@ -245,12 +250,6 @@ targets_rss_fire_seasonal <- c(
 		predict_h1_forest_seasonal(season_prep, s_fire_model, "fire", season_key),
 		pattern = map(s_fire_model, season_prep, season_key)
 	),
-	# what does open look like
-	tar_target(
-		pred_h1_open_s_fire,
-		predict_h1_open_seasonal(season_prep, s_fire_model, "fire", season_key),
-		pattern = map(s_fire_model, season_prep, season_key)
-	),
 
 	tar_target(
 		pred_h1_s_new_burn,
@@ -275,12 +274,6 @@ targets_rss_fire_seasonal <- c(
 	),
 
 	tar_target(
-		rss_open_s_fire,
-		calc_rss_seasonal(pred_h1_open_s_fire, 'h1_open_s_fire', pred_h2_s_fire, 'h2_s_fire', season_key),
-		map(pred_h1_open_s_fire, season_key)
-	),
-
-	tar_target(
 		rss_s_new_burn,
 		calc_rss_seasonal(pred_h1_s_new_burn, 'h1_new_burn_s', pred_h2_s_fire, 'h2_s_fire', season_key),
 		pattern = map(pred_h1_s_new_burn, season_key)
@@ -295,11 +288,6 @@ targets_rss_fire_seasonal <- c(
 	tar_target(
 		plot_rss_forest_s_fire,
 		plot_rss_seasonal_forest(rss_forest_s_fire, plot_theme(), "fire")
-	),
-
-	tar_target(
-		plot_rss_open_s_fire,
-		plot_rss_seasonal_open(rss_open_s_fire, plot_theme(), "fire")
 	),
 
 	tar_target(
@@ -354,7 +342,7 @@ targets_road_effects <- c(
 	),
 	tar_target(
 		s_indiv_road,
-		indiv_seasonal(s_road_model, season_key),
+		indiv_seasonal(s_road_model, season_key, "road"),
 		pattern = map(s_road_model, season_key)
 	),
 	tar_target(
@@ -376,13 +364,13 @@ targets_speed_road <- c(
 		)
 	),
 	tar_target(
-		calc_speed_open_road,
-		calc_speed(prep_speed_road, 'open road', seq = 0:1)
+		calc_speed_forest_road,
+		calc_speed(prep_speed_road, 'forest road', seq = 0:1)
 	),
 	tar_target(
-		plot_speed_open_road,
-		plot_box(calc_speed_open_road, plot_theme()) +
-			labs(x = 'Open', y = 'Speed (m/2hr)')
+		plot_speed_forest_road,
+		plot_box(calc_speed_forest_road, plot_theme()) +
+			labs(x = '% Forested', y = 'Speed (m/2hr)')
 	),
 	tar_target(
 		calc_speed_tch,
@@ -405,7 +393,7 @@ targets_speed_road <- c(
 	),
 	tar_target(
 		road_plots,
-		save_plot(plot_speed_open_road, "road_model_speed_open",
+		save_plot(plot_speed_forest_road, "road_model_speed_forest",
 							plot_speed_tch, "road_model_speed_tch",
 							plot_speed_minor, "road_model_speed_minor")
 	)
@@ -426,13 +414,13 @@ targets_speed_road_seasonal <- c(
 		map(s_indiv_road, season_key)
 	),
 	tar_target(
-		calc_speed_open_s_road,
-		calc_speed_seasonal(prep_speed_s_road, 'open', "road", seq = 0:1, season_key),
+		calc_speed_forest_s_road,
+		calc_speed_seasonal(prep_speed_s_road, 'forest', "road", seq = 0:1, season_key),
 		map(prep_speed_s_road, season_key)
 	),
 	tar_target(
-		plot_speed_open_s_road,
-		plot_box_seasonal_speed(calc_speed_open_s_road, plot_theme(), "road")
+		plot_speed_forest_s_road,
+		plot_box_seasonal_speed(calc_speed_forest_s_road, plot_theme(), "road", "forest")
 	),
 
 	tar_target(
@@ -644,7 +632,6 @@ tar_target(
 										social_fire_model, "fire", "alone")
 ),
 
-
 tar_target(
 	pred_h1_new_burn_alone,
 	predict_h1_new_burn_social(subset(model_prep, season == "winter"),
@@ -691,7 +678,6 @@ tar_target(
 		fire_rss_forest_social,
 		join_rss(fire_rss_forest_alone, fire_rss_forest_dyad)
 	),
-
 
 tar_target(
 	rss_new_burn_dyad,
@@ -924,6 +910,74 @@ targets_rss_road_social <- c(
 												 plot_rss_minor_social, "rss_minor_social")
 	)
 
+)
+
+# Population-level RSS of social models with max-min values ----
+targets_rss_social_popn <- c(
+	tar_target(
+		fire_popn,
+		setDT(readr::read_csv('fire_betas.csv', show_col_types = FALSE))
+		),
+	tar_target(
+		road_popn,
+		setDT(readr::read_csv('road_betas.csv', show_col_types = FALSE))
+	),
+
+	tar_target(
+		popn_fire_pred_h1_forest_dyad,
+		predict_h1_forest_social_popn(model_prep, fire_popn, "fire", "dyad")
+	),
+	tar_target(
+		popn_fire_pred_h1_forest_alone,
+		predict_h1_forest_social_popn(model_prep, fire_popn, "fire", "alone")
+	),
+	tar_target(
+		popn_fire_pred_h2_dyad,
+		predict_h2_popn(subset(model_prep, season == "winter"), fire_popn, "fire dyad")
+	),
+
+	tar_target(
+		popn_fire_pred_h2_alone,
+		predict_h2_popn(subset(model_prep, season == "winter"), fire_popn, "fire alone")
+	),
+
+	tar_target(
+		min_forest_dyad,
+		calc_rss_popn(popn_fire_pred_h1_forest_dyad, 'h1_forest_min', popn_fire_pred_h2_dyad, 'h2_min')
+	),
+
+	tar_target(
+		mean_forest_dyad,
+		calc_rss_popn(popn_fire_pred_h1_forest_dyad, 'h1_forest_mean', popn_fire_pred_h2_dyad, 'h2_mean')
+	),
+
+	tar_target(
+		max_forest_dyad,
+		calc_rss_popn(popn_fire_pred_h1_forest_dyad, 'h1_forest_max', popn_fire_pred_h2_dyad, 'h2_max')
+	),
+
+
+	tar_target(
+		min_forest_alone,
+		calc_rss_popn(popn_fire_pred_h1_forest_alone, 'h1_forest_min', popn_fire_pred_h2_alone, 'h2_min')
+	),
+
+	tar_target(
+		mean_forest_alone,
+		calc_rss_popn(popn_fire_pred_h1_forest_alone, 'h1_forest_mean', popn_fire_pred_h2_alone, 'h2_mean')
+	),
+
+	tar_target(
+		max_forest_alone,
+		calc_rss_popn(popn_fire_pred_h1_forest_alone, 'h1_forest_max', popn_fire_pred_h2_alone, 'h2_max')
+	),
+
+	tar_target(
+		popn_forest_social,
+		join_rss_popn(min_forest_alone, min_forest_dyad,
+									mean_forest_alone, mean_forest_dyad,
+									max_forest_alone, max_forest_dyad)
+	)
 )
 
 # Targets: all ------------------------------------------------------------

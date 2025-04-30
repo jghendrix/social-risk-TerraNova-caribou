@@ -40,7 +40,7 @@ g <- ggplot(data, aes(x, rss)) +
 				axis.text = element_text(size = 10))
 
 ggsave(
-	filename = paste0('graphics/rev/rss/rss_', axis, '-', i, '.png'),
+	filename = paste0('graphics/rss/rss_', axis, '-', i, '.png'),
 	width = 1500,
 	height = 1500,
 	units = "px",
