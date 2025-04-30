@@ -922,68 +922,114 @@ targets_rss_social_popn <- c(
 		road_popn,
 		setDT(readr::read_csv('road_betas.csv', show_col_types = FALSE))
 	),
-
+	## Social RSS for forest at the population level ----
 	tar_target(
-		popn_fire_pred_h1_forest_dyad,
-		predict_h1_forest_social_popn(model_prep, fire_popn, "fire", "dyad")
+		p_fire_pred_h1_forest_dyad,
+		predict_h1_forest_social_p(model_prep, fire_popn, "fire", "dyad")
 	),
 	tar_target(
-		popn_fire_pred_h1_forest_alone,
-		predict_h1_forest_social_popn(model_prep, fire_popn, "fire", "alone")
+		p_fire_pred_h1_forest_alone,
+		predict_h1_forest_social_p(model_prep, fire_popn, "fire", "alone")
 	),
 	tar_target(
-		popn_fire_pred_h2_dyad,
-		predict_h2_popn(subset(model_prep, season == "winter"), fire_popn, "fire dyad")
+		p_fire_pred_h2_dyad,
+		predict_h2_p(subset(model_prep, season == "winter"),
+								 fire_popn, "fire dyad", "zero")
 	),
-
 	tar_target(
-		popn_fire_pred_h2_alone,
-		predict_h2_popn(subset(model_prep, season == "winter"), fire_popn, "fire alone")
+		p_fire_pred_h2_alone,
+		predict_h2_p(subset(model_prep, season == "winter"),
+								 fire_popn, "fire alone", "zero")
 	),
 
 	tar_target(
 		min_forest_dyad,
-		calc_rss_popn(popn_fire_pred_h1_forest_dyad, 'h1_forest_min', popn_fire_pred_h2_dyad, 'h2_min')
+		calc_rss_p(p_fire_pred_h1_forest_dyad, 'h1_forest_min', p_fire_pred_h2_dyad, 'h2_min')
 	),
 
 	tar_target(
 		mean_forest_dyad,
-		calc_rss_popn(popn_fire_pred_h1_forest_dyad, 'h1_forest_mean', popn_fire_pred_h2_dyad, 'h2_mean')
+		calc_rss_p(p_fire_pred_h1_forest_dyad, 'h1_forest_mean', p_fire_pred_h2_dyad, 'h2_mean')
 	),
 
 	tar_target(
 		max_forest_dyad,
-		calc_rss_popn(popn_fire_pred_h1_forest_dyad, 'h1_forest_max', popn_fire_pred_h2_dyad, 'h2_max')
+		calc_rss_p(p_fire_pred_h1_forest_dyad, 'h1_forest_max', p_fire_pred_h2_dyad, 'h2_max')
 	),
-
 
 	tar_target(
 		min_forest_alone,
-		calc_rss_popn(popn_fire_pred_h1_forest_alone, 'h1_forest_min', popn_fire_pred_h2_alone, 'h2_min')
+		calc_rss_p(p_fire_pred_h1_forest_alone, 'h1_forest_min', p_fire_pred_h2_alone, 'h2_min')
 	),
 
 	tar_target(
 		mean_forest_alone,
-		calc_rss_popn(popn_fire_pred_h1_forest_alone, 'h1_forest_mean', popn_fire_pred_h2_alone, 'h2_mean')
+		calc_rss_p(p_fire_pred_h1_forest_alone, 'h1_forest_mean', p_fire_pred_h2_alone, 'h2_mean')
 	),
 
 	tar_target(
 		max_forest_alone,
-		calc_rss_popn(popn_fire_pred_h1_forest_alone, 'h1_forest_max', popn_fire_pred_h2_alone, 'h2_max')
+		calc_rss_p(p_fire_pred_h1_forest_alone, 'h1_forest_max', p_fire_pred_h2_alone, 'h2_max')
 	),
 
 	tar_target(
-		popn_forest_social,
-		join_rss_popn(min_forest_alone, min_forest_dyad,
-									mean_forest_alone, mean_forest_dyad,
-									max_forest_alone, max_forest_dyad)
+		p_forest_social,
+		join_rss_p(min_forest_alone, min_forest_dyad,
+							 mean_forest_alone, mean_forest_dyad,
+							 max_forest_alone, max_forest_dyad)
 	),
-
 	tar_target(
-		popn_forest_plot,
-		plot_rss_social_popn(popn_forest_social, plot_theme()) +
+		p_forest_plot,
+		plot_rss_social_p(p_forest_social, plot_theme()) +
 			labs(x = 'Proportion forested', y = 'logRSS',
-					title = 'Social RSS for forest'))
+					 title = 'Social RSS for forest')),
+
+	## Population level new burn social RSS -----
+	tar_target(
+		p_fire_pred_h1_new_dyad,
+		predict_h1_new_burn_social_p(model_prep, fire_popn, "dyad")
+	),
+	tar_target(
+		p_fire_pred_h1_new_alone,
+		predict_h1_new_burn_social_p(model_prep, fire_popn, "alone")
+	),
+	tar_target(
+		min_new_dyad,
+		calc_rss_p(p_fire_pred_h1_new_dyad, 'h1_new_min', p_fire_pred_h2_dyad, 'h2_min')
+	),
+	tar_target(
+		mean_new_dyad,
+		calc_rss_p(p_fire_pred_h1_new_dyad, 'h1_new_mean', p_fire_pred_h2_dyad, 'h2_mean')
+	),
+	tar_target(
+		max_new_dyad,
+		calc_rss_p(p_fire_pred_h1_new_dyad, 'h1_new_max', p_fire_pred_h2_dyad, 'h2_max')
+	),
+	tar_target(
+		min_new_alone,
+		calc_rss_p(p_fire_pred_h1_new_alone, 'h1_new_min', p_fire_pred_h2_alone, 'h2_min')
+	),
+	tar_target(
+		mean_new_alone,
+		calc_rss_p(p_fire_pred_h1_new_alone, 'h1_new_mean', p_fire_pred_h2_alone, 'h2_mean')
+	),
+	tar_target(
+		max_new_alone,
+		calc_rss_p(p_fire_pred_h1_new_alone, 'h1_new_max', p_fire_pred_h2_alone, 'h2_max')
+	),
+	tar_target(
+		p_new_social,
+		join_rss_p(min_new_alone, min_new_dyad,
+							 mean_new_alone, mean_new_dyad,
+							 max_new_alone, max_new_dyad)
+	),
+	tar_target(
+		p_new_plot,
+		plot_rss_social_p(p_new_social, plot_theme()) +
+			labs(x = 'Distance to new burn (km)', y = 'logRSS',
+					 title = 'Social RSS for distance to new burns'))
+
+	## Population level RSS for distance to old burns -----
 )
 
 # Targets: all ------------------------------------------------------------

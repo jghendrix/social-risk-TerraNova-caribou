@@ -1,4 +1,4 @@
-join_rss_popn <- function(min_alone, min_dyad,
+join_rss_p <- function(min_alone, min_dyad,
 													mean_alone, mean_dyad,
 													max_alone, max_dyad) {
 

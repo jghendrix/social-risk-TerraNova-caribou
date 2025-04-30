@@ -1,7 +1,7 @@
 #' @title Predict H1 forest
 #' @export
 #' @author Julie W. Turner, Alec L. Robitaille
-predict_h1_forest_social_popn <- function(DT, popn, predictor, sociality) {
+predict_h1_forest_social_p <- function(DT, popn, predictor, sociality) {
 
 	DT %<>% filter(season == "winter",
 								 !is.na(in_group))

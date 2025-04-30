@@ -1,42 +1,62 @@
 #' @title Predict H2
 #' @export
 #' @author Jack G Hendrix
-predict_h2_popn <- function(DT, popn, predictor) {
+predict_h2_p <- function(DT, popn, predictor, ref = "mean forest") {
 
-	# forest is set to 0 as the reference level so we can ignore it
+	# default value for ref is to use the mean forest cover (when calculating RSS for distance to burns or roads)
+	# if calculating RSS for forest itself, we want to use zero as ref level
+
+	DT %<>% summarise(sl = log(mean(DT$sl_)),
+										forest = ifelse(ref == "zero", 0,
+																		mean(DT$prop_forest, na.rm = T)),
+										dist_new = log(median(DT$dist_to_new_burn, na.rm = T) + 1),
+										dist_old = log(median(DT$dist_to_old_burn, na.rm = T) + 1))
+
+	new <- cbind(DT, popn)
+	setDT(new)
 
 	if(predictor == "fire alone") {
 
-		DT %<>% summarise(sl = log(mean(DT$sl_)),
-											dist_new = log(median(DT$dist_to_new_burn, na.rm = T) + 1),
-											dist_old = log(median(DT$dist_to_old_burn, na.rm = T) + 1))
-
-		new <- cbind(DT, popn)
-		setDT(new)
-
 		new[, h2_min :=
 					sl*sl_B +
+					forest*forest_B +
+					forest*forestXalone_min +
 					dist_new*dist_new_B +
 					dist_old*dist_old_B +
+					sl*forest*slXforest +
 					sl*dist_new*slXnew +
 					sl*dist_old*slXold
 		]
-		new[, h2_mean := h2_min]
-		new[, h2_max := h2_min]
+
+		new[, h2_mean :=
+					sl*sl_B +
+					forest*forest_B +
+					forest*forestXalone_mean +
+					dist_new*dist_new_B +
+					dist_old*dist_old_B +
+					sl*forest*slXforest +
+					sl*dist_new*slXnew +
+					sl*dist_old*slXold
+		]
+		new[, h2_max :=
+					sl*sl_B +
+					forest*forest_B +
+					forest*forestXalone_max +
+					dist_new*dist_new_B +
+					dist_old*dist_old_B +
+					sl*forest*slXforest +
+					sl*dist_new*slXnew +
+					sl*dist_old*slXold
+		]
 
 		return(new)
 }
 	if(predictor == "fire dyad") {
 
-		DT %<>% summarise(sl = log(mean(DT$sl_)),
-											dist_new = log(median(DT$dist_to_new_burn, na.rm = T) + 1),
-											dist_old = log(median(DT$dist_to_old_burn, na.rm = T) + 1))
-
-		new <- cbind(DT, popn)
-		setDT(new)
-
-		new[, h2_min :=
+	new[, h2_min :=
 					sl*sl_B +
+					forest*forest_B +
+					sl*forest*slXforest +
 					dist_new*dist_new_B +
 					dist_old*dist_old_B +
 					dist_new*newXdyad_min +
@@ -46,6 +66,8 @@ predict_h2_popn <- function(DT, popn, predictor) {
 		]
 		new[, h2_mean :=
 					sl*sl_B +
+					forest*forest_B +
+					sl*forest*slXforest +
 					dist_new*dist_new_B +
 					dist_old*dist_old_B +
 					dist_new*newXdyad_mean +
@@ -55,6 +77,8 @@ predict_h2_popn <- function(DT, popn, predictor) {
 		]
 		new[, h2_max :=
 						sl*sl_B +
+					forest*forest_B +
+					sl*forest*slXforest +
 						dist_new*dist_new_B +
 						dist_old*dist_old_B +
 						dist_new*newXdyad_max +
@@ -67,37 +91,47 @@ predict_h2_popn <- function(DT, popn, predictor) {
 
 	if(predictor == "road alone") {
 
-		DT %<>% summarise(sl = log(mean(DT$sl_)),
-											dist_tch = log(median(DT$dist_to_tch, na.rm = T) + 1),
-											dist_minor = log(median(DT$dist_to_minor, na.rm = T) + 1))
-
-		new <- cbind(DT, popn)
-		setDT(new)
-
-		new[, h2_min :=
+	new[, h2_min :=
 					sl*sl_B +
+					forest*forest_B +
+					forest*forestXalone_min +
+					sl*forest*slXforest +
 					dist_tch*dist_tch_B +
 					dist_minor*dist_minor_B +
 					sl*dist_tch*slXtch +
 					sl*dist_minor*slXminor
 		]
-		new[, h2_mean := h2_min]
-		new[, h2_max := h2_min]
+		new[, h2_mean :=
+					sl*sl_B +
+					forest*forest_B +
+					forest*forestXalone_mean +
+					sl*forest*slXforest +
+					dist_tch*dist_tch_B +
+					dist_minor*dist_minor_B +
+					sl*dist_tch*slXtch +
+					sl*dist_minor*slXminor
+				]
+
+		new[, h2_max :=
+					sl*sl_B +
+					forest*forest_B +
+					forest*forestXalone_max +
+					sl*forest*slXforest +
+					dist_tch*dist_tch_B +
+					dist_minor*dist_minor_B +
+					sl*dist_tch*slXtch +
+					sl*dist_minor*slXminor
+				]
 
 		return(new)
 	}
 
 	if(predictor == "road dyad") {
 
-		DT %<>% summarise(sl = log(mean(DT$sl_)),
-											dist_tch = log(median(DT$dist_to_tch, na.rm = T) + 1),
-											dist_minor = log(median(DT$dist_to_minor, na.rm = T) + 1))
-
-		tch <- cbind(DT, popn)
-		setDT(tch)
-
-		tch[, h2_min :=
+		new[, h2_min :=
 					sl*sl_B +
+					forest*forest_B +
+					sl*forest*slXforest +
 					dist_tch*dist_tch_B +
 					dist_minor*dist_minor_B +
 					dist_tch*tchXdyad_min +
@@ -105,8 +139,10 @@ predict_h2_popn <- function(DT, popn, predictor) {
 					sl*dist_tch*slXtch +
 					sl*dist_minor*slXminor
 		]
-		tch[, h2_mean :=
+		new[, h2_mean :=
 					sl*sl_B +
+					forest*forest_B +
+					sl*forest*slXforest +
 					dist_tch*dist_tch_B +
 					dist_minor*dist_minor_B +
 					dist_tch*tchXdyad_mean +
@@ -114,8 +150,10 @@ predict_h2_popn <- function(DT, popn, predictor) {
 					sl*dist_tch*slXtch +
 					sl*dist_minor*slXminor
 		]
-		tch[, h2_max :=
+		new[, h2_max :=
 					sl*sl_B +
+					forest*forest_B +
+					sl*forest*slXforest +
 					dist_tch*dist_tch_B +
 					dist_minor*dist_minor_B +
 					dist_tch*tchXdyad_max +
