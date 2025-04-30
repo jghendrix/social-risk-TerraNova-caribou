@@ -977,7 +977,13 @@ targets_rss_social_popn <- c(
 		join_rss_popn(min_forest_alone, min_forest_dyad,
 									mean_forest_alone, mean_forest_dyad,
 									max_forest_alone, max_forest_dyad)
-	)
+	),
+
+	tar_target(
+		popn_forest_plot,
+		plot_rss_social_popn(popn_forest_social, plot_theme()) +
+			labs(x = 'Proportion forested', y = 'logRSS',
+					title = 'Social RSS for forest'))
 )
 
 # Targets: all ------------------------------------------------------------
