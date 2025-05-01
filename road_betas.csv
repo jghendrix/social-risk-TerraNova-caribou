@@ -1,2 +1,2 @@
-sl_B,forest_B,dist_tch_B,dist_minor_B,forestXalone_min,forestXalone_mean,forestXalone_max,tchXdyad_min,tchXdyad_mean,tchXdyad_max,minorXdyad_min,minorXdyad_mean,minorXdyad_max,slXforest,slXtch,slXminor
-0.44515,0.87392,2.10887,0.19497,0.42537,0.68487,0.94437,-1.59369,-0.47487,0.64395,-0.0745,0.3187,0.7119,-0.29053,-0.06906,0.04187
+sl_B,forest_B,forest_B_min,forest_B_max,dist_tch_B,tch_B_min,tch_B_max,dist_minor_B,minor_B_min,minor_B_max,forestXalone_min,forestXalone_mean,forestXalone_max,tchXdyad_min,tchXdyad_mean,tchXdyad_max,minorXdyad_min,minorXdyad_mean,minorXdyad_max,slXforest,slXtch,slXminor
+0.44515,0.87392,0.53233,1.21551,2.10887,1.36832,2.84942,0.19497,-0.06065,0.45059,0.42537,0.68487,0.94437,-1.59369,-0.47487,0.64395,-0.0745,0.3187,0.7119,-0.29053,-0.06906,0.04187

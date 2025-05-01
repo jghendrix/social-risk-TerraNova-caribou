@@ -149,13 +149,13 @@ if(model == "fire") {
 		new[, h2_mean :=
 					sl*sl_B +
 					forest*forest_B +
-					dist_new*dist_new_B +
-					dist_old*dist_old_B +
-					dist_new*newXdyad_mean +
-					dist_old*oldXdyad_mean +
+					dist_tch*dist_tch_B +
+					dist_minor*dist_minor_B +
+					dist_tch*tchXdyad_mean +
+					dist_minor*minorXdyad_mean +
 					sl*forest*slXforest +
-					sl*dist_new*slXnew +
-					sl*dist_old*slXold
+					sl*dist_tch*slXtch +
+					sl*dist_minor*slXminor
 		]
 
 		if(predictor == "tch") {

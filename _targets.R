@@ -1042,10 +1042,178 @@ targets_rss_social_popn <- c(
 		plot_rss_social_p(p_new_social, plot_theme()) +
 			labs(x = 'Distance to new burn (km)', y = 'logRSS',
 					 title = 'Social RSS for distance to new burns'))
+	,
 
 	## Population level RSS for distance to old burns -----
-)
 
+	tar_target(
+		p_fire_h1_old_dyad,
+		predict_h1_old_burn_social_p(model_prep, fire_popn, "dyad")
+	),
+	tar_target(
+		p_fire_h1_old_alone,
+		predict_h1_old_burn_social_p(model_prep, fire_popn, "alone")
+	),
+	tar_target(
+		p_fire_h2_old_dyad,
+		predict_h2_p(subset(model_prep, season == "winter"),
+								 fire_popn, "fire", "old burn", "dyad")
+	),
+	tar_target(
+		p_fire_h2_old_alone,
+		predict_h2_p(subset(model_prep, season == "winter"),
+								 fire_popn, "fire", "old burn", "alone")
+	),
+	tar_target(
+		min_old_dyad,
+		calc_rss_p(p_fire_h1_old_dyad, 'h1_old_min', p_fire_h2_old_dyad, 'h2_min')
+	),
+	tar_target(
+		mean_old_dyad,
+		calc_rss_p(p_fire_h1_old_dyad, 'h1_old_mean', p_fire_h2_old_dyad, 'h2_mean')
+	),
+	tar_target(
+		max_old_dyad,
+		calc_rss_p(p_fire_h1_old_dyad, 'h1_old_max', p_fire_h2_old_dyad, 'h2_max')
+	),
+	tar_target(
+		min_old_alone,
+		calc_rss_p(p_fire_h1_old_alone, 'h1_old_min', p_fire_h2_old_alone, 'h2_min')
+	),
+	tar_target(
+		mean_old_alone,
+		calc_rss_p(p_fire_h1_old_alone, 'h1_old_mean', p_fire_h2_old_alone, 'h2_mean')
+	),
+	tar_target(
+		max_old_alone,
+		calc_rss_p(p_fire_h1_old_alone, 'h1_old_max', p_fire_h2_old_alone, 'h2_max')
+	),
+	tar_target(
+		p_old_social,
+		join_rss_p(min_old_alone, min_old_dyad,
+							 mean_old_alone, mean_old_dyad,
+							 max_old_alone, max_old_dyad)
+	),
+	tar_target(
+		p_old_plot,
+		plot_rss_social_p(p_old_social, plot_theme()) +
+			labs(x = 'Distance to old burn (km)', y = 'logRSS',
+					 title = 'Social RSS for distance to old burns')),
+
+	## Population level tch social RSS -----
+
+tar_target(
+	p_road_h1_tch_dyad,
+	predict_h1_tch_social_p(model_prep, road_popn, "dyad")
+),
+tar_target(
+	p_road_h1_tch_alone,
+	predict_h1_tch_social_p(model_prep, road_popn, "alone")
+),
+tar_target(
+	p_road_h2_tch_dyad,
+	predict_h2_p(subset(model_prep, season == "winter"),
+							 road_popn, "road", "tch", "dyad")
+),
+tar_target(
+	p_road_h2_tch_alone,
+	predict_h2_p(subset(model_prep, season == "winter"),
+							 road_popn, "road", "tch", "alone")
+),
+tar_target(
+	min_tch_dyad,
+	calc_rss_p(p_road_h1_tch_dyad, 'h1_tch_min', p_road_h2_tch_dyad, 'h2_min')
+),
+tar_target(
+	mean_tch_dyad,
+	calc_rss_p(p_road_h1_tch_dyad, 'h1_tch_mean', p_road_h2_tch_dyad, 'h2_mean')
+),
+tar_target(
+	max_tch_dyad,
+	calc_rss_p(p_road_h1_tch_dyad, 'h1_tch_max', p_road_h2_tch_dyad, 'h2_max')
+),
+tar_target(
+	min_tch_alone,
+	calc_rss_p(p_road_h1_tch_alone, 'h1_tch_min', p_road_h2_tch_alone, 'h2_min')
+),
+tar_target(
+	mean_tch_alone,
+	calc_rss_p(p_road_h1_tch_alone, 'h1_tch_mean', p_road_h2_tch_alone, 'h2_mean')
+),
+tar_target(
+	max_tch_alone,
+	calc_rss_p(p_road_h1_tch_alone, 'h1_tch_max', p_road_h2_tch_alone, 'h2_max')
+),
+tar_target(
+	p_tch_social,
+	join_rss_p(min_tch_alone, min_tch_dyad,
+						 mean_tch_alone, mean_tch_dyad,
+						 max_tch_alone, max_tch_dyad)
+),
+tar_target(
+	p_tch_plot,
+	plot_rss_social_p(p_tch_social, plot_theme()) +
+		labs(x = 'Distance to TCH (km)', y = 'logRSS',
+				 title = 'Social RSS for distance to TransCanada Highway'))
+,
+
+## Population level RSS for distance to minor roads -----
+
+tar_target(
+	p_road_h1_minor_dyad,
+	predict_h1_minor_social_p(model_prep, road_popn, "dyad")
+),
+tar_target(
+	p_road_h1_minor_alone,
+	predict_h1_minor_social_p(model_prep, road_popn, "alone")
+),
+tar_target(
+	p_road_h2_minor_dyad,
+	predict_h2_p(subset(model_prep, season == "winter"),
+							 road_popn, "road", "minor", "dyad")
+),
+tar_target(
+	p_road_h2_minor_alone,
+	predict_h2_p(subset(model_prep, season == "winter"),
+							 road_popn, "road", "minor", "alone")
+),
+tar_target(
+	min_minor_dyad,
+	calc_rss_p(p_road_h1_minor_dyad, 'h1_minor_min', p_road_h2_minor_dyad, 'h2_min')
+),
+tar_target(
+	mean_minor_dyad,
+	calc_rss_p(p_road_h1_minor_dyad, 'h1_minor_mean', p_road_h2_minor_dyad, 'h2_mean')
+),
+tar_target(
+	max_minor_dyad,
+	calc_rss_p(p_road_h1_minor_dyad, 'h1_minor_max', p_road_h2_minor_dyad, 'h2_max')
+),
+tar_target(
+	min_minor_alone,
+	calc_rss_p(p_road_h1_minor_alone, 'h1_minor_min', p_road_h2_minor_alone, 'h2_min')
+),
+tar_target(
+	mean_minor_alone,
+	calc_rss_p(p_road_h1_minor_alone, 'h1_minor_mean', p_road_h2_minor_alone, 'h2_mean')
+),
+tar_target(
+	max_minor_alone,
+	calc_rss_p(p_road_h1_minor_alone, 'h1_minor_max', p_road_h2_minor_alone, 'h2_max')
+),
+tar_target(
+	p_minor_social,
+	join_rss_p(min_minor_alone, min_minor_dyad,
+						 mean_minor_alone, mean_minor_dyad,
+						 max_minor_alone, max_minor_dyad)
+),
+tar_target(
+	p_minor_plot,
+	plot_rss_social_p(p_minor_social, plot_theme()) +
+		labs(x = 'Distance to minor roads (km)', y = 'logRSS',
+				 title = 'Social RSS for distance to minor roads'))
+
+)
 # Targets: all ------------------------------------------------------------
 # Automatically grab and combine all the "targets_*" lists above
 lapply(grep('targets', ls(), value = TRUE), get)

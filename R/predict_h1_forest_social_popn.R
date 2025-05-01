@@ -42,6 +42,7 @@ predict_h1_forest_social_p <- function(DT, popn, predictor, sociality) {
 							 	sl*dist_new*slXnew +
 							 	sl*dist_old*slXold
 			]
+
 			new[, h1_forest_max :=
 							sl*sl_B +
 							forest*forest_B +
@@ -79,8 +80,16 @@ predict_h1_forest_social_p <- function(DT, popn, predictor, sociality) {
 						sl*dist_new*slXnew +
 						sl*dist_old*slXold
 			]
-			new[, h1_forest_min := h1_forest_mean]
-			new[, h1_forest_max := h1_forest_mean]
+			new[, h1_forest_min :=
+						h1_forest_mean -
+						forest*forest_B +
+						forest*forest_B_min]
+
+			new[, h1_forest_max :=
+						h1_forest_mean -
+						forest*forest_B +
+						forest*forest_B_max]
+
 			new[, x := seq(from = 0, to = 1, length.out = N)]
 
 		}
@@ -119,6 +128,7 @@ predict_h1_forest_social_p <- function(DT, popn, predictor, sociality) {
 						sl*dist_new*slXnew +
 						sl*dist_old*slXold
 			]
+
 			new[, h1_forest_max :=
 						sl*sl_B +
 						forest*forest_B +
@@ -154,8 +164,17 @@ predict_h1_forest_social_p <- function(DT, popn, predictor, sociality) {
 						sl*dist_tch*slXtch +
 						sl*dist_minor*slXminor
 			]
-			new[, h1_forest_min := h1_forest_mean]
-			new[, h1_forest_max := h1_forest_mean]
+
+			new[, h1_forest_min :=
+						h1_forest_mean -
+						forest*forest_B +
+						forest*forest_B_min
+					]
+
+			new[, h1_forest_max :=
+						h1_forest_mean -
+						forest*forest_B +
+						forest*forest_B_max]
 
 			new[, x := seq(from = 0, to = 1, length.out = N)]
 
