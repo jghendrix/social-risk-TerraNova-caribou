@@ -922,7 +922,7 @@ targets_rss_social_popn <- c(
 		road_popn,
 		setDT(readr::read_csv('road_betas.csv', show_col_types = FALSE))
 	),
-	## Social RSS for forest at the population level ----
+	## Social RSS for forest at the population level in fire ----
 
 	tar_target(
 		p_fire_h1_forest_dyad,
@@ -983,9 +983,70 @@ targets_rss_social_popn <- c(
 		p_forest_plot,
 		plot_rss_social_p(p_forest_social, plot_theme()) +
 			labs(x = 'Proportion forested', y = 'logRSS',
-					 title = 'Social RSS for forest')),
+					 title = 'Social RSS for forest (fire model)')),
 
+	# Forest from roads model -----
 
+	tar_target(
+		p_road_h1_forest_dyad,
+		predict_h1_forest_social_p(model_prep, road_popn, "road", "dyad")
+	),
+	tar_target(
+		p_road_h1_forest_alone,
+		predict_h1_forest_social_p(model_prep, road_popn, "road", "alone")
+	),
+	tar_target(
+		p_road_h2_forest_dyad,
+		predict_h2_p(subset(model_prep, season == "winter"),
+								 road_popn, "road", "forest", "dyad")
+	),
+	tar_target(
+		p_road_h2_forest_alone,
+		predict_h2_p(subset(model_prep, season == "winter"),
+								 road_popn, "road", "forest", "alone")
+	),
+
+	tar_target(
+		r_min_forest_dyad,
+		calc_rss_p(p_road_h1_forest_dyad, 'h1_forest_min', p_road_h2_forest_dyad, 'h2_min')
+	),
+
+	tar_target(
+		r_mean_forest_dyad,
+		calc_rss_p(p_road_h1_forest_dyad, 'h1_forest_mean', p_road_h2_forest_dyad, 'h2_mean')
+	),
+
+	tar_target(
+		r_max_forest_dyad,
+		calc_rss_p(p_road_h1_forest_dyad, 'h1_forest_max', p_road_h2_forest_dyad, 'h2_max')
+	),
+
+	tar_target(
+		r_min_forest_alone,
+		calc_rss_p(p_road_h1_forest_alone, 'h1_forest_min', p_road_h2_forest_alone, 'h2_min')
+	),
+
+	tar_target(
+		r_mean_forest_alone,
+		calc_rss_p(p_road_h1_forest_alone, 'h1_forest_mean', p_road_h2_forest_alone, 'h2_mean')
+	),
+
+	tar_target(
+		r_max_forest_alone,
+		calc_rss_p(p_road_h1_forest_alone, 'h1_forest_max', p_road_h2_forest_alone, 'h2_max')
+	),
+
+	tar_target(
+		r_p_forest_social,
+		join_rss_p(min_forest_alone, min_forest_dyad,
+							 mean_forest_alone, mean_forest_dyad,
+							 max_forest_alone, max_forest_dyad)
+	),
+	tar_target(
+		r_p_forest_plot,
+		plot_rss_social_p(p_forest_social, plot_theme()) +
+			labs(x = 'Proportion forested', y = 'logRSS',
+					 title = 'Social RSS for forest (road model)')),
 	## Population level new burn social RSS -----
 
 
