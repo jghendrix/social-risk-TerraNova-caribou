@@ -570,7 +570,16 @@ targets_social_fire <- c(
 	tar_target(
 		social_fire_model_check,
 		model_check(social_fire_model)
+	),
+	tar_target(
+		social_fire_model_noforest,
+		model_fire_social_noforest(model_prep)
+	),
+	tar_target(
+		social_fire_modelno_forest_check,
+		model_check(social_fire_model_noforest)
 	)
+
 )
 
 # Targets: Social model output ----------------------
@@ -759,6 +768,14 @@ targets_social_road_effects <- c(
 	tar_target(
 		social_road_boxplot,
 		plot_box_horiz(indiv_social_road, plot_theme(), "social road")
+	),
+	tar_target(
+		social_road_model_noforest,
+		model_road_social_noforest(model_prep)
+	),
+	tar_target(
+		social_road_model_noforest_check,
+		model_check(social_road_model_noforest)
 	)
 )
 
