@@ -7,7 +7,7 @@ predict_h1_forest <- function(DT, model, predictor) {
 if(predictor == "fire") {
 	new_data <- DT[, .(
 		sl_ = mean(sl_),
-		prop_forest = seq(from = 0, to = 1, length.out = N),
+		prop_forest = seq(from = 1, to = 0, length.out = N),
 		dist_to_new_burn = median(dist_to_new_burn, na.rm = T),
 		dist_to_old_burn = median(dist_to_old_burn, na.rm = T),
 		indiv_step_id = NA
@@ -17,7 +17,7 @@ if(predictor == "fire") {
 else {
 	new_data <- DT[, .(
 		sl_ = mean(sl_),
-		prop_forest = seq(from = 0, to = 1, length.out = N),
+		prop_forest = seq(from = 1, to = 0, length.out = N),
 		dist_to_tch = median(dist_to_tch, na.rm = T),
 		dist_to_minor = median(dist_to_minor, na.rm = T),
 		indiv_step_id = NA

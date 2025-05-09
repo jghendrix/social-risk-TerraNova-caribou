@@ -219,8 +219,8 @@ targets_rss_fire <- c(
 	tar_target(
 		plot_rss_forest_fire,
 		plot_rss(rss_forest_fire, plot_theme()) +
-			labs(x = 'Forest', y = 'logRSS',
-					 title = 'RSS compared to 0 forest (fire model)')
+			labs(x = 'Proportion open habitat', y = 'logRSS',
+					 title = 'RSS compared to 100% forest (fire model)')
 	),
 	tar_target(
 		plot_rss_new_burn,
