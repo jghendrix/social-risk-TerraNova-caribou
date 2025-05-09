@@ -201,12 +201,16 @@ targets_rss_fire <- c(
 		predict_h1_forest(model_prep, fire_model, "fire")
 	),
 	tar_target(
+		pred_h2_forest_fire,
+		predict_h2_forest(model_prep, fire_model, "fire")
+	),
+	tar_target(
 		pred_h2_fire,
 		predict_h2(model_prep, fire_model, "fire")
 	),
 	tar_target(
 		rss_forest_fire,
-		calc_rss(pred_h1_forest_fire, 'h1_forest', pred_h2_fire, 'h2')
+		calc_rss(pred_h1_forest_fire, 'h1_forest', pred_h2_forest_fire, 'h2')
 	),
 	tar_target(
 		rss_old_burn,
@@ -236,7 +240,7 @@ targets_rss_fire <- c(
 	),
 	tar_target(
 		fire_rss_plots,
-		save_rss_plot(plot_rss_forest_fire, "rss_forest_fire-model",
+		save_rss_plot(plot_rss_forest_fire, "rss_open_fire-model",
 									plot_rss_old_burn, "rss_dist_to_old_burn",
 									plot_rss_new_burn, "rss_dist_to_new_burn")
 	)
@@ -477,8 +481,8 @@ targets_rss_road <- c(
 	tar_target(
 		plot_rss_forest_road,
 		plot_rss(rss_forest_road, plot_theme()) +
-			labs(x = 'Forest', y = 'logRSS',
-					 title = 'RSS compared to 0 forest (road model)')
+			labs(x = 'Proportion open habitat', y = 'logRSS',
+					 title = 'RSS compared to 100% forest (road model)')
 	),
 	tar_target(
 		plot_rss_tch,
@@ -494,7 +498,7 @@ targets_rss_road <- c(
 	),
 	tar_target(
 		road_rss_plots,
-		save_rss_plot(plot_rss_forest_road, "rss_forest_road-model",
+		save_rss_plot(plot_rss_forest_road, "rss_open_road-model",
 									plot_rss_tch, "rss_dist_to_tch",
 									plot_rss_minor, "rss_dist_to_minor_roads")
 	)
@@ -594,40 +598,6 @@ targets_social_fire_effects <- c(
 	)
 )
 
-# Social roads model speeds ----------------
-#
-# targets_speed_road_social <- c(
-# 	tar_target(
-# 		prep_speed_fire_social,
-# 		prepare_speed(
-# 			DT = subset(model_prep, season == "winter"),
-# 			summary = indiv_social_fire,
-# 			model = "fire",
-# 			params = dist_parameters
-# 		)
-# 	),
-#
-# 	tar_target(
-# 		calc_speed_new_alone,
-# 		calc_speed_alone(prep_speed_fire_social, 'dist_to_new_burn', seq(1, 5000, length.out = 100L), model_prep)
-# 	),
-#
-# 	tar_target(
-# 		calc_speed_new_dyad,
-# 		calc_speed_dyad(prep_speed_fire_social, 'dist_to_new_burn', seq(1, 5000, length.out = 100L), model_prep)
-# 	),
-#
-# 	tar_target(
-# 		plot_speed_new_social,
-# 		plot_speed_social(calc_speed_new_alone, calc_speed_new_dyad, plot_theme()) +
-# 			labs(x = 'Distance to new burn (km)', y = 'Speed (m/2hr)')
-# 	)
-#
-# )
-#
-#
-#
-
 # Targets: RSS from social fire model -----------------------------------------------------------
 targets_rss_fire_social <- c(
 	tar_target(
@@ -717,8 +687,8 @@ tar_target(
 	tar_target(
 		fire_plot_rss_forest_social,
 		plot_rss_social(fire_rss_forest_social, plot_theme()) +
-			labs(x = 'Forest', y = 'logRSS',
-					 title = 'Social RSS compared to 0 forest')
+			labs(x = 'Proportion open habitat', y = 'logRSS',
+					 title = 'Social RSS compared to 100% forest')
 	),
 tar_target(
 	plot_rss_new_burn_social,
@@ -943,11 +913,11 @@ targets_rss_social_popn <- c(
 
 	tar_target(
 		p_fire_h1_forest_dyad,
-		predict_h1_forest_social_p(model_prep, fire_popn, "fire", "dyad")
+		predict_h1_open_social_p(model_prep, fire_popn, "fire", "dyad")
 	),
 	tar_target(
 		p_fire_h1_forest_alone,
-		predict_h1_forest_social_p(model_prep, fire_popn, "fire", "alone")
+		predict_h1_open_social_p(model_prep, fire_popn, "fire", "alone")
 	),
 	tar_target(
 		p_fire_h2_forest_dyad,
@@ -962,32 +932,32 @@ targets_rss_social_popn <- c(
 
 	tar_target(
 		min_forest_dyad,
-		calc_rss_p(p_fire_h1_forest_dyad, 'h1_forest_min', p_fire_h2_forest_dyad, 'h2_min')
+		calc_rss_p(p_fire_h1_forest_dyad, 'h1_open_min', p_fire_h2_forest_dyad, 'h2_min')
 	),
 
 	tar_target(
 		mean_forest_dyad,
-		calc_rss_p(p_fire_h1_forest_dyad, 'h1_forest_mean', p_fire_h2_forest_dyad, 'h2_mean')
+		calc_rss_p(p_fire_h1_forest_dyad, 'h1_open_mean', p_fire_h2_forest_dyad, 'h2_mean')
 	),
 
 	tar_target(
 		max_forest_dyad,
-		calc_rss_p(p_fire_h1_forest_dyad, 'h1_forest_max', p_fire_h2_forest_dyad, 'h2_max')
+		calc_rss_p(p_fire_h1_forest_dyad, 'h1_open_max', p_fire_h2_forest_dyad, 'h2_max')
 	),
 
 	tar_target(
 		min_forest_alone,
-		calc_rss_p(p_fire_h1_forest_alone, 'h1_forest_min', p_fire_h2_forest_alone, 'h2_min')
+		calc_rss_p(p_fire_h1_forest_alone, 'h1_open_min', p_fire_h2_forest_alone, 'h2_min')
 	),
 
 	tar_target(
 		mean_forest_alone,
-		calc_rss_p(p_fire_h1_forest_alone, 'h1_forest_mean', p_fire_h2_forest_alone, 'h2_mean')
+		calc_rss_p(p_fire_h1_forest_alone, 'h1_open_mean', p_fire_h2_forest_alone, 'h2_mean')
 	),
 
 	tar_target(
 		max_forest_alone,
-		calc_rss_p(p_fire_h1_forest_alone, 'h1_forest_max', p_fire_h2_forest_alone, 'h2_max')
+		calc_rss_p(p_fire_h1_forest_alone, 'h1_open_max', p_fire_h2_forest_alone, 'h2_max')
 	),
 
 	tar_target(
@@ -999,8 +969,8 @@ targets_rss_social_popn <- c(
 	tar_target(
 		p_forest_plot,
 		plot_rss_social_p(p_forest_social, plot_theme()) +
-			labs(x = 'Proportion forested', y = 'logRSS',
-					 title = 'Social RSS for forest (fire model)')),
+			labs(x = 'Proportion open habitat', y = 'logRSS',
+					 title = 'Social RSS for open habitat')),
 
 	# Forest from roads model -----
 
@@ -1055,15 +1025,16 @@ targets_rss_social_popn <- c(
 
 	tar_target(
 		r_p_forest_social,
-		join_rss_p(min_forest_alone, min_forest_dyad,
-							 mean_forest_alone, mean_forest_dyad,
-							 max_forest_alone, max_forest_dyad)
+		join_rss_p(r_min_forest_alone, r_min_forest_dyad,
+							 r_mean_forest_alone, r_mean_forest_dyad,
+							 r_max_forest_alone, r_max_forest_dyad)
 	),
 	tar_target(
 		r_p_forest_plot,
-		plot_rss_social_p(p_forest_social, plot_theme()) +
-			labs(x = 'Proportion forested', y = 'logRSS',
-					 title = 'Social RSS for forest (road model)')),
+		plot_rss_social_p(r_p_forest_social, plot_theme()) +
+			labs(x = 'Proportion open habitat', y = 'logRSS',
+					 title = 'Social RSS for open habitat (road model)')),
+
 	## Population level new burn social RSS -----
 
 

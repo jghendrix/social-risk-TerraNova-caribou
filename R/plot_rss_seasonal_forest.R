@@ -27,11 +27,11 @@ g <- ggplot(data, aes(x, rss)) +
 		scale_fill_colorblind() +
 		#scale_x_continuous(limits = c(0, 5000)) +
 		plot_theme() +
-		labs(x = 'Forest', y = 'logRSS') +
-		ggtitle(paste0(predictor, ' model - RSS compared to 0 forest - ', data$season))
+		labs(x = 'Proportion open habitat', y = 'logRSS') +
+		ggtitle(paste0(predictor, ' model - RSS compared to 100% forest - ', data$season))
 
 ggsave(
-	filename = paste0('graphics/rss/rss_forest_', predictor, '_', i, '.png'),
+	filename = paste0('graphics/rss/rss_open_', predictor, '_', i, '.png'),
 	width = 10,
 	height = 10,
 	dpi = 320

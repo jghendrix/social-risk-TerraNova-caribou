@@ -9,8 +9,8 @@ predict_h2_p <- function(DT, popn, model, predictor, sociality) {
 if(model == "fire") {
 
 	DT %<>% summarise(sl = log(mean(DT$sl_)),
-										forest = ifelse(predictor == "forest", 0,
-																		mean(DT$prop_forest, na.rm = T)),
+										open = ifelse(predictor == "forest", 0,
+																		1 - mean(DT$prop_forest, na.rm = T)),
 										dist_new = log(median(DT$dist_to_new_burn,
 																					na.rm = T) + 1),
 										dist_old = log(median(DT$dist_to_old_burn,
@@ -23,11 +23,11 @@ if(model == "fire") {
 
 	new[, h2_mean :=
 				sl*sl_B +
-				forest*forest_B +
-				forest*forestXalone_mean +
+				open*open_B +
+				open*openXalone_mean +
 				dist_new*dist_new_B +
 				dist_old*dist_old_B +
-				sl*forest*slXforest +
+				sl*open*slXopen +
 				sl*dist_new*slXnew +
 				sl*dist_old*slXold
 	]
@@ -35,13 +35,13 @@ if(model == "fire") {
 	if(predictor == "forest") {
 
 		new[, h2_min :=
-					h2_mean - forest*forestXalone_mean +
-					forest*forestXalone_min
+					h2_mean - open*openXalone_mean +
+					open*openXalone_min
 		]
 
 		new[, h2_max :=
-					h2_mean - forest*forestXalone_mean +
-					forest*forestXalone_max
+					h2_mean - open*openXalone_mean +
+					open*openXalone_max
 		]
 }
 		else {
@@ -53,12 +53,12 @@ if(model == "fire") {
 
 		new[, h2_mean :=
 					sl*sl_B +
-					forest*forest_B +
+					open*open_B +
 					dist_new*dist_new_B +
 					dist_old*dist_old_B +
 					dist_new*newXdyad_mean +
 					dist_old*oldXdyad_mean +
-					sl*forest*slXforest +
+					sl*open*slXopen +
 					sl*dist_new*slXnew +
 					sl*dist_old*slXold
 		]
@@ -102,8 +102,8 @@ if(model == "fire") {
 	else{
 
 	DT %<>% summarise(sl = log(mean(DT$sl_)),
-										forest = ifelse(predictor == "forest", 0,
-																		mean(DT$prop_forest, na.rm = T)),
+										open = ifelse(predictor == "forest", 0,
+																		1 - mean(DT$prop_forest, na.rm = T)),
 										dist_tch = log(median(DT$dist_to_tch,
 																					na.rm = T) + 1),
 										dist_minor = log(median(DT$dist_to_minor,
@@ -116,25 +116,25 @@ if(model == "fire") {
 
 		new[, h2_mean :=
 					sl*sl_B +
-					forest*forest_B +
-					forest*forestXalone_mean +
+					open*open_B +
+					open*openXalone_mean +
 					dist_tch*dist_tch_B +
 					dist_minor*dist_minor_B +
-					sl*forest*slXforest +
+					sl*open*slXopen +
 					sl*dist_tch*slXtch +
 					sl*dist_minor*slXminor
 		]
 
-		if(predictor == "forest") {
+		if(predictor == "open") {
 
 			new[, h2_min :=
-						h2_mean - forest*forestXalone_mean +
-						forest*forestXalone_min
+						h2_mean - open*openXalone_mean +
+						open*openXalone_min
 			]
 
 			new[, h2_max :=
-						h2_mean - forest*forestXalone_mean +
-						forest*forestXalone_max
+						h2_mean - open*openXalone_mean +
+						open*openXalone_max
 			]
 }
 			else{
@@ -148,12 +148,12 @@ if(model == "fire") {
 
 		new[, h2_mean :=
 					sl*sl_B +
-					forest*forest_B +
+					open*open_B +
 					dist_tch*dist_tch_B +
 					dist_minor*dist_minor_B +
 					dist_tch*tchXdyad_mean +
 					dist_minor*minorXdyad_mean +
-					sl*forest*slXforest +
+					sl*open*slXopen +
 					sl*dist_tch*slXtch +
 					sl*dist_minor*slXminor
 		]
