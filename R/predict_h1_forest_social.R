@@ -15,7 +15,7 @@ if(predictor == "fire") {
 	if(sociality == "alone"){
 		new_data <- DT[, .(
 			sl_ = mean(sl_),
-			prop_forest = seq(from = 0, to = 1, length.out = N),
+			prop_forest = seq(from = 1, to = 0, length.out = N),
 			in_group = "alone",
 			dist_to_new_burn = median(dist_to_new_burn, na.rm = T),
 			dist_to_old_burn = median(dist_to_old_burn, na.rm = T),
@@ -49,7 +49,7 @@ if(predictor == "fire") {
 	else {
 		new_data <- DT[, .(
 			sl_ = mean(sl_),
-			prop_forest = seq(from = 0, to = 1, length.out = N),
+			prop_forest = seq(from = 1, to = 0, length.out = N),
 			in_group = "dyad",
 			dist_to_new_burn = median(dist_to_new_burn, na.rm = T),
 			dist_to_old_burn = median(dist_to_old_burn, na.rm = T),
@@ -86,7 +86,7 @@ if(predictor == "fire") {
 		if(sociality == "alone"){
 			new_data <- DT[, .(
 				sl_ = mean(sl_),
-				prop_forest = seq(from = 0, to = 1, length.out = N),
+				prop_forest = seq(from = 1, to = 0, length.out = N),
 				in_group = "alone",
 				dist_to_tch = median(dist_to_tch, na.rm = T),
 				dist_to_minor = median(dist_to_minor, na.rm = T),
@@ -118,7 +118,7 @@ if(predictor == "fire") {
 		else {
 			new_data <- DT[, .(
 				sl_ = mean(sl_),
-				prop_forest = seq(from = 0, to = 1, length.out = N),
+				prop_forest = seq(from = 1, to = 0, length.out = N),
 				in_group = "dyad",
 				dist_to_tch = median(dist_to_tch, na.rm = T),
 				dist_to_minor = median(dist_to_minor, na.rm = T),

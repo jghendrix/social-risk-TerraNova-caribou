@@ -1,129 +1,197 @@
 #' @title Predict H2
 #' @export
 #' @author Jack G Hendrix
-predict_h2_popn <- function(DT, popn, predictor) {
+predict_h2_p <- function(DT, popn, model, predictor, sociality) {
 
-	# forest is set to 0 as the reference level so we can ignore it
+	# default value for ref is to use the mean forest cover (when calculating RSS for distance to burns or roads)
+	# if calculating RSS for forest itself, we want to use zero as ref level
 
-	if(predictor == "fire alone") {
+if(model == "fire") {
 
-		DT %<>% summarise(sl = log(mean(DT$sl_)),
-											dist_new = log(median(DT$dist_to_new_burn, na.rm = T) + 1),
-											dist_old = log(median(DT$dist_to_old_burn, na.rm = T) + 1))
+	DT %<>% summarise(sl = log(mean(DT$sl_)),
+										open = ifelse(predictor == "forest", 0,
+																		1 - mean(DT$prop_forest, na.rm = T)),
+										dist_new = log(median(DT$dist_to_new_burn,
+																					na.rm = T) + 1),
+										dist_old = log(median(DT$dist_to_old_burn,
+																					na.rm = T) + 1))
 
-		new <- cbind(DT, popn)
-		setDT(new)
+	new <- cbind(DT, popn)
+	setDT(new)
+
+	if(sociality == "alone") {
+
+	new[, h2_mean :=
+				sl*sl_B +
+				open*open_B +
+				open*openXalone_mean +
+				dist_new*dist_new_B +
+				dist_old*dist_old_B +
+				sl*open*slXopen +
+				sl*dist_new*slXnew +
+				sl*dist_old*slXold
+	]
+
+	if(predictor == "forest") {
 
 		new[, h2_min :=
-					sl*sl_B +
-					dist_new*dist_new_B +
-					dist_old*dist_old_B +
-					sl*dist_new*slXnew +
-					sl*dist_old*slXold
+					h2_mean - open*openXalone_mean +
+					open*openXalone_min
 		]
-		new[, h2_mean := h2_min]
-		new[, h2_max := h2_min]
 
-		return(new)
+		new[, h2_max :=
+					h2_mean - open*openXalone_mean +
+					open*openXalone_max
+		]
 }
-	if(predictor == "fire dyad") {
+		else {
+			new[, h2_min := h2_mean]
+			new[, h2_max := h2_mean]
+		}
+	 }
+	else {
 
-		DT %<>% summarise(sl = log(mean(DT$sl_)),
-											dist_new = log(median(DT$dist_to_new_burn, na.rm = T) + 1),
-											dist_old = log(median(DT$dist_to_old_burn, na.rm = T) + 1))
-
-		new <- cbind(DT, popn)
-		setDT(new)
-
-		new[, h2_min :=
-					sl*sl_B +
-					dist_new*dist_new_B +
-					dist_old*dist_old_B +
-					dist_new*newXdyad_min +
-					dist_old*oldXdyad_min +
-					sl*dist_new*slXnew +
-					sl*dist_old*slXold
-		]
 		new[, h2_mean :=
 					sl*sl_B +
+					open*open_B +
 					dist_new*dist_new_B +
 					dist_old*dist_old_B +
 					dist_new*newXdyad_mean +
 					dist_old*oldXdyad_mean +
+					sl*open*slXopen +
 					sl*dist_new*slXnew +
 					sl*dist_old*slXold
 		]
-		new[, h2_max :=
-						sl*sl_B +
-						dist_new*dist_new_B +
-						dist_old*dist_old_B +
-						dist_new*newXdyad_max +
-						dist_old*oldXdyad_max +
-						sl*dist_new*slXnew +
-						sl*dist_old*slXold
+
+		if(predictor == "new burn") {
+
+			new[, h2_min :=
+						h2_mean - dist_new*newXdyad_mean +
+						dist_new*newXdyad_min
+					]
+			new[, h2_max :=
+						h2_mean - dist_new*newXdyad_mean +
+						dist_new*newXdyad_max
+					]
+}
+		else {
+
+			if(predictor == "old burn") {
+
+			new[, h2_min :=
+						h2_mean - dist_old*oldXdyad_mean +
+						dist_old*oldXdyad_min
+			]
+			new[, h2_max :=
+						h2_mean - dist_old*oldXdyad_mean +
+						dist_old*oldXdyad_max
 		]
-		return(new)
-	}
 
-	if(predictor == "road alone") {
+		}
+			else{
+				new[, h2_min := h2_mean]
+				new[, h2_max := h2_mean]
+							}
 
-		DT %<>% summarise(sl = log(mean(DT$sl_)),
-											dist_tch = log(median(DT$dist_to_tch, na.rm = T) + 1),
-											dist_minor = log(median(DT$dist_to_minor, na.rm = T) + 1))
+		}
 
-		new <- cbind(DT, popn)
-		setDT(new)
+		}
 
-		new[, h2_min :=
+}
+
+	else{
+
+	DT %<>% summarise(sl = log(mean(DT$sl_)),
+										open = ifelse(predictor == "forest", 0,
+																		1 - mean(DT$prop_forest, na.rm = T)),
+										dist_tch = log(median(DT$dist_to_tch,
+																					na.rm = T) + 1),
+										dist_minor = log(median(DT$dist_to_minor,
+																					na.rm = T) + 1))
+
+	new <- cbind(DT, popn)
+	setDT(new)
+
+	if(sociality == "alone") {
+
+		new[, h2_mean :=
 					sl*sl_B +
+					open*open_B +
+					open*openXalone_mean +
 					dist_tch*dist_tch_B +
 					dist_minor*dist_minor_B +
+					sl*open*slXopen +
 					sl*dist_tch*slXtch +
 					sl*dist_minor*slXminor
 		]
-		new[, h2_mean := h2_min]
-		new[, h2_max := h2_min]
 
-		return(new)
+		if(predictor == "open") {
+
+			new[, h2_min :=
+						h2_mean - open*openXalone_mean +
+						open*openXalone_min
+			]
+
+			new[, h2_max :=
+						h2_mean - open*openXalone_mean +
+						open*openXalone_max
+			]
+}
+			else{
+				new[, h2_min := h2_mean]
+				new[, h2_max := h2_mean]
+			}
+
 	}
 
-	if(predictor == "road dyad") {
+	else{
 
-		DT %<>% summarise(sl = log(mean(DT$sl_)),
-											dist_tch = log(median(DT$dist_to_tch, na.rm = T) + 1),
-											dist_minor = log(median(DT$dist_to_minor, na.rm = T) + 1))
-
-		tch <- cbind(DT, popn)
-		setDT(tch)
-
-		tch[, h2_min :=
+		new[, h2_mean :=
 					sl*sl_B +
-					dist_tch*dist_tch_B +
-					dist_minor*dist_minor_B +
-					dist_tch*tchXdyad_min +
-					dist_minor*minorXdyad_min +
-					sl*dist_tch*slXtch +
-					sl*dist_minor*slXminor
-		]
-		tch[, h2_mean :=
-					sl*sl_B +
+					open*open_B +
 					dist_tch*dist_tch_B +
 					dist_minor*dist_minor_B +
 					dist_tch*tchXdyad_mean +
 					dist_minor*minorXdyad_mean +
-					sl*dist_tch*slXtch +
-					sl*dist_minor*slXminor
-		]
-		tch[, h2_max :=
-					sl*sl_B +
-					dist_tch*dist_tch_B +
-					dist_minor*dist_minor_B +
-					dist_tch*tchXdyad_max +
-					dist_minor*minorXdyad_max +
+					sl*open*slXopen +
 					sl*dist_tch*slXtch +
 					sl*dist_minor*slXminor
 		]
 
-		return(new)
+		if(predictor == "tch") {
+
+			new[, h2_min :=
+						h2_mean - dist_tch*tchXdyad_mean +
+						dist_tch*tchXdyad_min
+			]
+			new[, h2_max :=
+						h2_mean - dist_tch*tchXdyad_mean +
+						dist_tch*tchXdyad_max
+			]
 }
+			else {
+
+				if(predictor == "minor") {
+
+					new[, h2_min :=
+								h2_mean - dist_minor*minorXdyad_mean +
+								dist_minor*minorXdyad_min
+					]
+					new[, h2_max :=
+								h2_mean - dist_minor*minorXdyad_mean +
+								dist_minor*minorXdyad_max
+					]
+
+				}
+				else{
+					new[, h2_min := h2_mean]
+					new[, h2_max := h2_mean]
+				}
+
+			}
+
+		}
+	}
+
+	return(new)
 }

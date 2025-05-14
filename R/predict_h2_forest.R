@@ -6,7 +6,7 @@ predict_h2_forest <- function(DT, model, predictor) {
 	if(predictor == "fire") {
 	new_data <- DT[, .(
 		sl_ = mean(sl_),
-		prop_forest = 0,
+		prop_forest = 1,
 		dist_to_new_burn = median(dist_to_new_burn, na.rm = T),
 		dist_to_old_burn = median(dist_to_old_burn, na.rm = T),
 		indiv_step_id = NA),
@@ -19,7 +19,7 @@ predict_h2_forest <- function(DT, model, predictor) {
 	if(predictor == "road") {
 		new_data <-	DT[, .(
 			sl_ = mean(sl_),
-			prop_forest = 0,
+			prop_forest = 1,
 			dist_to_tch = median(dist_to_tch, na.rm = T),
 			dist_to_minor = median(dist_to_minor, na.rm = T),
 			indiv_step_id = NA),
@@ -32,7 +32,7 @@ predict_h2_forest <- function(DT, model, predictor) {
 	if(predictor == "fire alone") {
 		new_data <-	DT[, .(
 			sl_ = mean(sl_),
-			prop_forest = 0,
+			prop_forest = 1,
 			in_group = "alone",
 			dist_to_new_burn = median(dist_to_new_burn, na.rm = T),
 			dist_to_old_burn = median(dist_to_old_burn, na.rm = T),
@@ -58,7 +58,7 @@ predict_h2_forest <- function(DT, model, predictor) {
 	if(predictor == "fire dyad") {
 		new_data <-	DT[, .(
 			sl_ = mean(sl_),
-			prop_forest = 0,
+			prop_forest = 1,
 			in_group = "dyad",
 			dist_to_new_burn = median(dist_to_new_burn, na.rm = T),
 			dist_to_old_burn = median(dist_to_old_burn, na.rm = T),
@@ -88,7 +88,7 @@ predict_h2_forest <- function(DT, model, predictor) {
 	if(predictor == "road alone") {
 		new_data <- DT[, .(
 			sl_ = mean(sl_),
-			prop_forest = 0,
+			prop_forest = 1,
 			in_group = "alone",
 			dist_to_tch = median(dist_to_tch, na.rm = T),
 			dist_to_minor = median(dist_to_minor, na.rm = T),
@@ -120,7 +120,7 @@ predict_h2_forest <- function(DT, model, predictor) {
 	if(predictor == "road dyad") {
 		new_data <- DT[, .(
 			sl_ = mean(sl_),
-			prop_forest = 0,
+			prop_forest = 1,
 			in_group = "dyad",
 			dist_to_tch = median(dist_to_tch, na.rm = T),
 			dist_to_minor = median(dist_to_minor, na.rm = T),

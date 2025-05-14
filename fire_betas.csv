@@ -1,2 +1,2 @@
-﻿sl_B,forest_B,dist_new_B,dist_old_B,forestXalone_min,forestXalone_mean,forestXalone_max,newXdyad_min,newXdyad_mean,newXdyad_max,oldXdyad_min,oldXdyad_mean,oldXdyad_max,slXforest,slXnew,slXold
-0.316796,0.763456,-0.065618,0.023413,0.459989,0.719033,0.978077,-0.12032,-0.240086,-0.000554,-0.016986,-0.14748,0.113508,-0.278828,0.006571,-0.025328
+﻿sl_B,open_B,open_B_min,open_B_max,dist_new_B,new_B_min,new_B_max,dist_old_B,old_B_min,old_B_max,openXalone_min,openXalone_mean,openXalone_max,newXdyad_min,newXdyad_mean,newXdyad_max,oldXdyad_min,oldXdyad_mean,oldXdyad_max,slXopen,slXnew,slXold
+0.316796,-0.763456,-1.096187,-0.430725,-0.065618,-0.162434,0.031198,0.023413,-0.081568,0.128394,-0.978077,-0.719033,-0.459989,-0.240086,-0.12032,-0.000554,-0.14748,-0.016986,0.113508,0.278828,0.006571,-0.025328
