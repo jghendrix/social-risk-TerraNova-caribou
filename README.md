@@ -5,4 +5,4 @@ Modelled after iSSA Guild's targets-iSSA workflow, [![DOI](https://zenodo.org/ba
 
 Code and data associated with:
 Social facilitation of risky habitats in woodland caribou: responses to fire and roads
-Hendrix, J.G., Brown, C.B., Gosse, J. & Vander Wal, E. 2025. Canadian Journal of Zoology. [![DOI](https://doi.org/10.1139/cjz-2024-0150)
+Hendrix, J.G., Brown, C.B., Gosse, J. & Vander Wal, E. 2025. Canadian Journal of Zoology, [![DOI](https://doi.org/10.1139/cjz-2024-0150)
